@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/mtuldp.iml" filepath="$PROJECT_DIR$/mtuldp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/api/onos-mtuldp-api.iml" filepath="$PROJECT_DIR$/api/onos-mtuldp-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/onos-mtuldp-app.iml" filepath="$PROJECT_DIR$/app/onos-mtuldp-app.iml" />
+    </modules>
+  </component>
+</project>
