@@ -53,7 +53,7 @@ public class MtuldpEdgeLink extends DefaultMtuldpLink {
         return mtuRate;
     }
 
-    public String getUrnId() {
+    public String getUrnLinkId() {
         return urnId;
     }
 
@@ -126,6 +126,16 @@ public class MtuldpEdgeLink extends DefaultMtuldpLink {
                 .append(urnId)
                 .append(mtuRate)
                 .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "MtuldpEdgeLink{" +
+                "device=" + device +
+                ", host=" + host +
+                ", urnId='" + urnId + '\'' +
+                ", mtuRate=" + mtuRate +
+                '}';
     }
 }
 

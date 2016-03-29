@@ -124,4 +124,14 @@ public class MtuldpDirectLink extends DefaultMtuldpLink {
                 .append(mtuRate)
                 .toHashCode();
     }
+
+    @Override
+    public String toString() {
+        return "MtuldpDirectLink{" +
+                "src=" + src +
+                ", dst=" + dst +
+                ", urnId='" + urnId + '\'' +
+                ", mtuRate=" + mtuRate +
+                '}';
+    }
 }

@@ -34,7 +34,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Created by fernando on 22/03/16.
  */
-public class MtudpStoreDao {
+public class MtuldpDataStorage {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -42,7 +42,7 @@ public class MtudpStoreDao {
     private Map<String, MtuldpEdgeLink> edgeLinkStore;
 
 
-    public MtudpStoreDao() {
+    public MtuldpDataStorage() {
         this.directLinkStore = new ConcurrentHashMap<>();
         this.edgeLinkStore = new ConcurrentHashMap<>();
     }
@@ -53,7 +53,7 @@ public class MtudpStoreDao {
 
         if (link instanceof MtuldpDirectLink) {
             MtuldpDirectLink tmpLink = (MtuldpDirectLink) link;
-            if (!directLinkStore.containsValue(link)) {
+            if (!directLinkStore.containsValue(tmpLink)) {
                 directLinkStore.put(tmpLink.getUrnLinkId(), tmpLink);
                 return true;
             } else {
@@ -63,11 +63,42 @@ public class MtudpStoreDao {
 
         } else if (link instanceof MtuldpEdgeLink) {
             MtuldpEdgeLink tmpLink = (MtuldpEdgeLink) link;
-            if (!edgeLinkStore.containsValue(link)) {
-                edgeLinkStore.put(tmpLink.getUrnId(), tmpLink);
+            if (!edgeLinkStore.containsValue(tmpLink)) {
+                edgeLinkStore.put(tmpLink.getUrnLinkId(), tmpLink);
                 return true;
             } else {
                 log.warn("the edge link is already exist");
+                return false;
+            }
+        } else {
+            log.error("the link unknown");
+        }
+        return false;
+    }
+    public boolean removeLink(String urn) {
+
+        checkNotNull(urn, "The link cannot be null");
+
+        DefaultMtuldpLink link = getLink(urn);
+
+        if (link instanceof MtuldpDirectLink) {
+            MtuldpDirectLink tmpLink = (MtuldpDirectLink) link;
+            if (directLinkStore.containsValue(tmpLink)) {
+                directLinkStore.remove(tmpLink.getUrnLinkId());
+                log.debug("the direct link was deleted with id {}", tmpLink.getUrnLinkId());
+                return true;
+            } else {
+                log.warn("the direct link is not exist");
+                return false;
+            }
+        } else if (link instanceof MtuldpEdgeLink) {
+            MtuldpEdgeLink tmpLink = (MtuldpEdgeLink) link;
+            if (edgeLinkStore.containsValue(tmpLink)) {
+                edgeLinkStore.remove(tmpLink.getUrnLinkId());
+                log.debug("the direct link was deleted with id {}", tmpLink.getUrnLinkId());
+                return true;
+            } else {
+                log.warn("the edge link is not exist");
                 return false;
             }
         } else {
@@ -81,22 +112,24 @@ public class MtudpStoreDao {
         checkNotNull(newlink, "mtudplink cannot be null");
 
         if (newlink instanceof MtuldpDirectLink) {
-            if (directLinkStore.get(urn).equals(newlink)) {
-                log.debug("The new link object is equal to old object");
-                return false;
-            }
-            directLinkStore.replace(urn, directLinkStore.get(urn), (MtuldpDirectLink) newlink);
-            log.debug("New Direct link inserted");
-            return true;
-        } else if (newlink instanceof MtuldpEdgeLink) {
-            if (edgeLinkStore.get(urn).equals(newlink)) {
-                log.debug("The new link object is equal to old object");
-                return false;
-            }
-            edgeLinkStore.replace(urn, edgeLinkStore.get(urn), (MtuldpEdgeLink) newlink);
-            log.debug("New Edge link inserted");
-            return true;
+            if (!directLinkStore.get(urn).equals(newlink)) {
+                directLinkStore.replace(urn, directLinkStore.get(urn), (MtuldpDirectLink) newlink);
+                log.debug("New Direct link inserted");
+                return true;
 
+            } else {
+                log.debug("The new link object is equal to old object");
+                return false;
+            }
+        } else if (newlink instanceof MtuldpEdgeLink) {
+            if (!edgeLinkStore.get(urn).equals(newlink)) {
+                edgeLinkStore.replace(urn, edgeLinkStore.get(urn), (MtuldpEdgeLink) newlink);
+                log.debug("New Edge link inserted");
+                return true;
+            } else {
+                log.debug("The new link object is equal to old object");
+                return false;
+            }
         } else {
             log.error("the link unknown");
         }
@@ -105,7 +138,7 @@ public class MtudpStoreDao {
 
     public MtuldpDirectLink getMtuldpDirectLink(String urn) {
 
-        if (getLinkType(urn) instanceof MtuldpDirectLink) {
+        if (getLink(urn) instanceof MtuldpDirectLink) {
             return directLinkStore.get(urn);
         }
         return null;
@@ -113,13 +146,12 @@ public class MtudpStoreDao {
 
     public MtuldpEdgeLink getMtuldpEdgeLink(String urn) {
 
-        if (getLinkType(urn) instanceof MtuldpEdgeLink) {
+        if (getLink(urn) instanceof MtuldpEdgeLink) {
             return edgeLinkStore.get(urn);
         }
         return null;
 
     }
-
     public Set<MtuldpDirectLink> getMtuldpDirectLinks() {
         return (Set<MtuldpDirectLink>) directLinkStore.values();
     }
@@ -130,7 +162,7 @@ public class MtudpStoreDao {
 
     public int getMtuLinkRate(String urn) {
 
-        DefaultMtuldpLink link = checkNotNull(getLinkType(urn), "The link object unknown");
+        DefaultMtuldpLink link = checkNotNull(getLink(urn), "The link object unknown");
 
         if (link instanceof MtuldpDirectLink) {
             return directLinkStore.get(urn).getMtuRate();
@@ -140,7 +172,7 @@ public class MtudpStoreDao {
         return -1;
     }
 
-    private DefaultMtuldpLink getLinkType(String urn) {
+    private DefaultMtuldpLink getLink(String urn) {
         if (StringUtils.containsIgnoreCase(urn, Link.Type.DIRECT.name())) {
             return directLinkStore.get(urn);
         } else if (StringUtils.containsIgnoreCase(urn, Link.Type.EDGE.name())) {
@@ -155,7 +187,7 @@ public class MtudpStoreDao {
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        MtudpStoreDao that = (MtudpStoreDao) o;
+        MtuldpDataStorage that = (MtuldpDataStorage) o;
 
         return new EqualsBuilder()
                 .append(directLinkStore, that.directLinkStore)

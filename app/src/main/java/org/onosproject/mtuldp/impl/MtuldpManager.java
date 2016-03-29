@@ -12,29 +12,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.onosproject.mtuldp.api;
+package org.onosproject.mtuldp.impl;
 
-import org.onosproject.mtuldp.api.link.DefaultMtuldpLink;
-import org.onosproject.mtuldp.api.link.MtuldpDirectLink;
-import org.onosproject.mtuldp.api.link.MtuldpEdgeLink;
-
-import java.util.Set;
+import org.apache.felix.scr.annotations.Component;
 
 /**
- * Created by fernando on 28/03/16.
+ * Created by fernando on 29/03/16.
  */
-
-public interface MtudpStoreService {
-
-    public void doAddLink(DefaultMtuldpLink link);
-
-    public void doDelLink(String urn);
-
-    public void doUpdLink(String urn, DefaultMtuldpLink newLink);
-
-    public Set<MtuldpDirectLink> getDirectLinks();
-
-    public Set<MtuldpEdgeLink> getEdgeLinks();
-
+@Component(immediate = true)
+public class MtuldpManager {
 
 }

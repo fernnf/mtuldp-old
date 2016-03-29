@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2016 Open Networking Laboratory
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ Copyright (c) 2016,  Gercom. Lab.
+  ~ Licensed under the Apache License,Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
   ~ You may obtain a copy of the License at
   ~
@@ -32,14 +31,12 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <onos.version>1.6.0-SNAPSHOT</onos.version>
-        <!-- Uncomment to generate ONOS app from this module.
-        <onos.app.name>org.foo.app</onos.app.name>
-        <onos.app.title>Foo App</onos.app.title>
-        <onos.app.origin>Foo, Inc.</onos.app.origin>
-        <onos.app.category>default</onos.app.category>
+        <onos.app.name>org.onosproject.mtuldp</onos.app.name>
+        <onos.app.title>Mtuldp App</onos.app.title>
+        <onos.app.origin>GERCOM, Lab.</onos.app.origin>
+        <onos.app.category>Protocols</onos.app.category>
         <onos.app.url>http://onosproject.org</onos.app.url>
-        <onos.app.readme>ONOS OSGi bundle archetype.</onos.app.readme>
-        -->
+        <onos.app.readme></onos.app.readme>
     </properties>
 
     <dependencies>
@@ -76,6 +73,12 @@
             <version>1.9.12</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.onosproject</groupId>
+            <artifactId>onos-mtuldp-api</artifactId>
+            <version>1.6.0-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
     <build>
