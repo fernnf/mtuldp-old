@@ -14,6 +14,8 @@
  */
 package org.onosproject.mtuldp.api.link;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.onosproject.net.ConnectPoint;
 import org.onosproject.net.Link;
 
@@ -96,4 +98,30 @@ public class MtuldpDirectLink extends DefaultMtuldpLink {
         }
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MtuldpDirectLink that = (MtuldpDirectLink) o;
+
+        return new EqualsBuilder()
+                .append(mtuRate, that.mtuRate)
+                .append(src, that.src)
+                .append(dst, that.dst)
+                .append(urnId, that.urnId)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(src)
+                .append(dst)
+                .append(urnId)
+                .append(mtuRate)
+                .toHashCode();
+    }
 }
