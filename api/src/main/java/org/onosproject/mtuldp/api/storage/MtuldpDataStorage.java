@@ -137,7 +137,6 @@ public class MtuldpDataStorage {
     }
 
     public MtuldpDirectLink getMtuldpDirectLink(String urn) {
-
         if (getLink(urn) instanceof MtuldpDirectLink) {
             return directLinkStore.get(urn);
         }
@@ -145,12 +144,10 @@ public class MtuldpDataStorage {
     }
 
     public MtuldpEdgeLink getMtuldpEdgeLink(String urn) {
-
         if (getLink(urn) instanceof MtuldpEdgeLink) {
             return edgeLinkStore.get(urn);
         }
         return null;
-
     }
     public Set<MtuldpDirectLink> getMtuldpDirectLinks() {
         return (Set<MtuldpDirectLink>) directLinkStore.values();

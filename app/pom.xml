@@ -145,6 +145,74 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <artifactId>exec-maven-plugin</artifactId>
+                <groupId>org.codehaus.mojo</groupId>
+                <version>1.4.0</version>
+                <executions>
+                    <execution>
+                        <id>Stop Project Service</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>onos-app</executable>
+                            <arguments>
+                                <argument>127.0.0.1</argument>
+                                <argument>reinstall</argument>
+                                <argument>${project.build.directory}/${project.artifactId}-${project.version}.oar</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <!--
+                    <execution>
+                        <id>Uninstall Project Service</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${onos.app.install}</executable>
+                            <arguments>
+                                <argument>127.0.0.1</argument>
+                                <argument>uninstall</argument>
+                                <argument>${onos.app.name}</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>Install Project Service</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${onos.app.install}</executable>
+                            <arguments>
+                                <argument>127.0.0.1</argument>
+                                <argument>install</argument>
+                                <argument>${project.build.directory}/${project.artifactId}-${project.version}.oar</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>Start Project Service</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${onos.app.install}</executable>
+                            <arguments>
+                                <argument>127.0.0.1</argument>
+                                <argument>activate</argument>
+                                <argument>${onos.app.name}</argument>
+                            </arguments>
+                        </configuration>
+                    </execution> -->
+                </executions>
+            </plugin>
         </plugins>
     </build>
 

@@ -34,7 +34,7 @@ import java.util.Set;
  */
 @Component(immediate = true)
 @Service
-public class MtuldpStorageManager implements MtuldpLinkStoreService{
+public class MtuldpStorageManager implements MtuldpLinkStoreService {
 
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
