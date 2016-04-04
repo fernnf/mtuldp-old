@@ -21,8 +21,11 @@ import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.onosproject.mtuldp.api.link.MtuldpDirectLink;
 import org.onosproject.mtuldp.api.storage.MtuldpLinkStoreService;
 import org.onosproject.net.ConnectPoint;
+import org.onosproject.net.Host;
+import org.onosproject.net.HostId;
 import org.onosproject.net.Link;
 import org.onosproject.net.edge.EdgePortService;
+import org.onosproject.net.host.HostService;
 import org.onosproject.net.link.LinkService;
 import org.onosproject.net.topology.Topology;
 import org.onosproject.net.topology.TopologyService;
@@ -49,12 +52,23 @@ public class MtuldpManager {
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
     protected EdgePortService edgePortService;
 
+    @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
+    protected HostService hostService;
+
+
     @Activate
     public void start() {
 
 
+
         for (ConnectPoint connectPoint : edgePortService.getEdgePoints() ){
             System.out.println(connectPoint.toString());
+            ///System.out.println(hostService.getConnectedHosts(connectPoint));
+
+            for  (Host host : hostService.getConnectedHosts(connectPoint) ){
+                System.out.println("Host: " + host.toString());
+            }
+
         }
 
 
