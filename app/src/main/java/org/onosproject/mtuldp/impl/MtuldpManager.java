@@ -14,6 +14,7 @@
  */
 package org.onosproject.mtuldp.impl;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Reference;
@@ -22,15 +23,19 @@ import org.onosproject.mtuldp.api.link.MtuldpDirectLink;
 import org.onosproject.mtuldp.api.storage.MtuldpLinkStoreService;
 import org.onosproject.net.ConnectPoint;
 import org.onosproject.net.Host;
-import org.onosproject.net.HostId;
 import org.onosproject.net.Link;
 import org.onosproject.net.edge.EdgePortService;
+import org.onosproject.net.host.HostEvent;
+import org.onosproject.net.host.HostListener;
 import org.onosproject.net.host.HostService;
 import org.onosproject.net.link.LinkService;
 import org.onosproject.net.topology.Topology;
 import org.onosproject.net.topology.TopologyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Set;
 
 /**
  * Created by fernando on 29/03/16.
@@ -66,7 +71,7 @@ public class MtuldpManager {
             ///System.out.println(hostService.getConnectedHosts(connectPoint));
 
             for  (Host host : hostService.getConnectedHosts(connectPoint) ){
-                System.out.println("Host: " + host.toString());
+                System.out.println("Host: " + host.id());
             }
 
         }
@@ -85,7 +90,7 @@ public class MtuldpManager {
 
     private class InnerSearchDirectLink implements Runnable {
 
-        LinkService links;
+        private LinkService links;
 
         public InnerSearchDirectLink(LinkService links) {
             this.links = links;
@@ -101,6 +106,35 @@ public class MtuldpManager {
                 } catch (IllegalAccessException e){
                     log.error("It cannot to add link by reason: {} ", e.getCause());
                 }
+            }
+        }
+    }
+
+    private class InnerSearchEdgeLink implements Runnable {
+
+        private EdgePortService edgePortService;
+
+        public InnerSearchEdgeLink(EdgePortService eps){
+            this.edgePortService = eps;
+        }
+
+        @Override
+        public void run() {
+            log.debug("/----------------------------/\nFinding new edge link\n/----------------------------------/");
+
+            System.out.println(hostService.getHostCount());
+
+
+            for (ConnectPoint connectPoint : edgePortService.getEdgePoints() ){
+
+
+                System.out.println(connectPoint.hostId()+ "merda");
+
+
+                for  (Host host : hostService.getConnectedHosts(connectPoint)){
+                    System.out.println("Host: " + host.id());
+                }
+
             }
         }
     }

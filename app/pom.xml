@@ -32,7 +32,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <onos.version>1.6.0-SNAPSHOT</onos.version>
         <onos.app.name>org.onosproject.mtuldp</onos.app.name>
-        <onos.app.title>Mtuldp App</onos.app.title>
+        <onos.app.title>Mtuldp App
+        </onos.app.title>
         <onos.app.origin>GERCOM, Lab.</onos.app.origin>
         <onos.app.category>Protocols</onos.app.category>
         <onos.app.url>http://onosproject.org</onos.app.url>

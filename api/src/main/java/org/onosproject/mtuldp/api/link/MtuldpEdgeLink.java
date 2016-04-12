@@ -17,6 +17,7 @@ package org.onosproject.mtuldp.api.link;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.onosproject.net.ConnectPoint;
+import org.onosproject.net.Host;
 import org.onosproject.net.Link;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -27,13 +28,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class MtuldpEdgeLink extends DefaultMtuldpLink {
 
     private final ConnectPoint device;
-    private final ConnectPoint host;
+    private final Host host;
 
     private final String urnId;
 
     private final int mtuRate;
 
-    private MtuldpEdgeLink(ConnectPoint device, ConnectPoint host, String urnId, int mtuRate) {
+    private MtuldpEdgeLink(ConnectPoint device, Host host, String urnId, int mtuRate) {
         super(Link.Type.EDGE);
         this.device = device;
         this.host = host;
@@ -45,7 +46,7 @@ public class MtuldpEdgeLink extends DefaultMtuldpLink {
         return device;
     }
 
-    public ConnectPoint getHost() {
+    public Host getHost() {
         return host;
     }
 
@@ -60,7 +61,7 @@ public class MtuldpEdgeLink extends DefaultMtuldpLink {
     public static final class Builder {
 
         private ConnectPoint device;
-        private ConnectPoint host;
+        private Host host;
 
         private int mtu;
 
@@ -69,7 +70,7 @@ public class MtuldpEdgeLink extends DefaultMtuldpLink {
             return this;
         }
 
-        public Builder hostPoint(ConnectPoint host){
+        public Builder hostPoint(Host host){
             this.host = host;
             return this;
         }
@@ -83,9 +84,9 @@ public class MtuldpEdgeLink extends DefaultMtuldpLink {
             return device.deviceId().toString()
                     + ":port:"
                     + device.port().toString()
-                    + host.hostId().toString()
+                    + host.mac().toString()
                     + ":vlan:"
-                    + host.hostId().vlanId()
+                    + host.vlan()
                     + ":mtu:"
                     + mtu;
         }
@@ -94,8 +95,6 @@ public class MtuldpEdgeLink extends DefaultMtuldpLink {
 
             checkNotNull(device,"The device cannot be null");
             checkNotNull(host, "The host cannot be null");
-            checkNotNull(host.hostId(),"The host description cannot be null");
-            checkNotNull(host.ipElementId(), "The host ip description cannot be null");
             checkNotNull(mtu, "The MTU rate cannot be null");
 
             return new MtuldpEdgeLink(device,host,buildLinkEdgeURN(),mtu);
