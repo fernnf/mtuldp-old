@@ -79,10 +79,12 @@ public class MtuldpDirectLink extends DefaultMtuldpLink {
         }
 
         private String buildLinkDirectURN(){
-            return ingress.deviceId().toString()
+            return "src:"
+                    +ingress.deviceId().toString()
                     + ":port:"
                     + ingress.port().toString()
-                    + egress.deviceId().toString()
+                    + ":dst:"
+                    + egress.deviceId()
                     + ":port:"
                     + egress.port().toString()
                     + ":mtu:"
@@ -127,11 +129,11 @@ public class MtuldpDirectLink extends DefaultMtuldpLink {
 
     @Override
     public String toString() {
-        return "MtuldpDirectLink{" +
-                "src=" + src +
-                ", dst=" + dst +
-                ", urnId='" + urnId + '\'' +
-                ", mtuRate=" + mtuRate +
+        return "\nMtuldpDirectLink{" +
+                "\nsrc=" + src +
+                ", \ndst=" + dst +
+                ", \nmtuRate=" + mtuRate +
+                ", \nurnId='" + urnId + '\'' +
                 '}';
     }
 }

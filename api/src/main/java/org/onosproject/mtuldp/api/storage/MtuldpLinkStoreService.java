@@ -17,6 +17,7 @@ package org.onosproject.mtuldp.api.storage;
 import org.onosproject.mtuldp.api.link.DefaultMtuldpLink;
 import org.onosproject.mtuldp.api.link.MtuldpDirectLink;
 import org.onosproject.mtuldp.api.link.MtuldpEdgeLink;
+import org.onosproject.net.ConnectPoint;
 
 import java.util.Set;
 
@@ -26,11 +27,11 @@ import java.util.Set;
 
 public interface MtuldpLinkStoreService {
 
-    public void doAddLink(DefaultMtuldpLink link) throws IllegalAccessException;
+    public void doAddLink(DefaultMtuldpLink link) ;
 
-    public void doDelLink(String urn);
+    public void doDelLink(ConnectPoint src, ConnectPoint dst);
 
-    public void doUpdLink(String urn, DefaultMtuldpLink newLink);
+    public void doUpdLink(ConnectPoint src, ConnectPoint dst, DefaultMtuldpLink newLink);
 
     public Set<MtuldpDirectLink> getDirectLinks();
 

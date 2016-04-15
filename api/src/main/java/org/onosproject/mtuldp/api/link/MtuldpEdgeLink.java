@@ -35,7 +35,7 @@ public class MtuldpEdgeLink extends DefaultMtuldpLink {
     private final int mtuRate;
 
     private MtuldpEdgeLink(ConnectPoint device, Host host, String urnId, int mtuRate) {
-        super(Link.Type.EDGE);
+        super(Link.Type.DIRECT);
         this.device = device;
         this.host = host;
         this.urnId = getUrnModule() + ":"+urnId;

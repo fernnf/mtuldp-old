@@ -26,7 +26,7 @@ public abstract class DefaultMtuldpLink {
 
     DefaultMtuldpLink(Link.Type type) {
 
-        this.obj_id = DEFAULT_URN_MODULE + ":" + type.name();
+        this.obj_id = DEFAULT_URN_MODULE + ":" + type.name().toLowerCase();
     }
 
     public String getUrnModule() {

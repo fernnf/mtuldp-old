@@ -24,6 +24,7 @@ import org.onosproject.mtuldp.api.link.MtuldpDirectLink;
 import org.onosproject.mtuldp.api.link.MtuldpEdgeLink;
 import org.onosproject.mtuldp.api.storage.MtuldpDataStorage;
 import org.onosproject.mtuldp.api.storage.MtuldpLinkStoreService;
+import org.onosproject.net.ConnectPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,9 +67,10 @@ public class MtuldpStorageManager implements MtuldpLinkStoreService {
     }
 
     @Override
-    public void doDelLink(String urn) {
+    public void doDelLink(ConnectPoint src, ConnectPoint dst) {
+
         if (data.removeLink(urn)){
-            log.info("The Link was added");
+            log.info("The Link was removed");
             log.debug("The Link was added: ID({})", urn);
         } else {
             throw new IllegalStateException("It is not possible to remove link");

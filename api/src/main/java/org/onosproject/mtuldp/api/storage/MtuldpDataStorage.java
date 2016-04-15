@@ -14,6 +14,7 @@
  */
 package org.onosproject.mtuldp.api.storage;
 
+import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -149,11 +150,11 @@ public class MtuldpDataStorage {
         return null;
     }
     public Set<MtuldpDirectLink> getMtuldpDirectLinks() {
-        return (Set<MtuldpDirectLink>) directLinkStore.values();
+        return ImmutableSet.copyOf(directLinkStore.values());
     }
 
     public Set<MtuldpEdgeLink> getMtuldpEdgeLinks() {
-        return (Set<MtuldpEdgeLink>) edgeLinkStore.values();
+        return ImmutableSet.copyOf(edgeLinkStore.values()) ;
     }
 
     public int getMtuLinkRate(String urn) {

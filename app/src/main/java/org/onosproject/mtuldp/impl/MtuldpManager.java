@@ -14,28 +14,26 @@
  */
 package org.onosproject.mtuldp.impl;
 
-import org.apache.commons.lang.ObjectUtils;
 import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.onosproject.mtuldp.api.link.MtuldpDirectLink;
+import org.onosproject.mtuldp.api.link.SearchDirectLinks;
+import org.onosproject.mtuldp.api.link.SearchEdgelinks;
 import org.onosproject.mtuldp.api.storage.MtuldpLinkStoreService;
-import org.onosproject.net.ConnectPoint;
-import org.onosproject.net.Host;
 import org.onosproject.net.Link;
 import org.onosproject.net.edge.EdgePortService;
-import org.onosproject.net.host.HostEvent;
-import org.onosproject.net.host.HostListener;
 import org.onosproject.net.host.HostService;
+import org.onosproject.net.link.LinkEvent;
+import org.onosproject.net.link.LinkListener;
 import org.onosproject.net.link.LinkService;
-import org.onosproject.net.topology.Topology;
 import org.onosproject.net.topology.TopologyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by fernando on 29/03/16.
@@ -61,90 +59,55 @@ public class MtuldpManager {
     protected HostService hostService;
 
 
+    private final ExecutorService searchService = Executors.newFixedThreadPool(2);
+
     @Activate
     public void start() {
 
+        searchService.execute(new SearchDirectLinks(linkService, mtuldpLinkStoreService));
+        searchService.execute(new SearchEdgelinks(edgePortService,hostService,mtuldpLinkStoreService));
 
-
-        for (ConnectPoint connectPoint : edgePortService.getEdgePoints() ){
-            System.out.println(connectPoint.toString());
-            ///System.out.println(hostService.getConnectedHosts(connectPoint));
-
-            for  (Host host : hostService.getConnectedHosts(connectPoint) ){
-                System.out.println("Host: " + host.id());
-            }
+        try {
+            Thread.sleep(3000);
+        } catch (Exception e){
 
         }
 
 
-        log.info("Started the mtuldp protocol");
-        for (Link link : linkService.getLinks()){
-            System.out.println(link.toString());
-        }
+        System.out.println("Total Direct Links (" + mtuldpLinkStoreService.getDirectLinks().toString()+ ") / Total Edge Links (" + mtuldpLinkStoreService.getEdgeLinks().size()+ ")");
 
     }
     public void stop() {
         log.info("Stopped the mtuldp protocol");
+        searchService.shutdown();
     }
 
-
-    private class InnerSearchDirectLink implements Runnable {
-
-        private LinkService links;
-
-        public InnerSearchDirectLink(LinkService links) {
-            this.links = links;
-        }
+    private class InnerDirectLinkListerner implements LinkListener{
 
         @Override
-        public void run() {
-            log.debug("/----------------------------/\nFinding new infrastructure link\n/----------------------------------/");
-            for (Link link : linkService.getLinks()) {
-                MtuldpDirectLink.Builder dlink = new MtuldpDirectLink.Builder().deviceEgress(link.dst()).deviceIngress(link.src()).mtuRate(1500);
-                try {
-                    mtuldpLinkStoreService.doAddLink(dlink.build());
-                } catch (IllegalAccessException e){
-                    log.error("It cannot to add link by reason: {} ", e.getCause());
-                }
-            }
-        }
-    }
+        public void event(LinkEvent event) {
 
-    private class InnerSearchEdgeLink implements Runnable {
+            switch (event.type()){
+                case LINK_ADDED:
+                    Link link = event.subject();
+                    MtuldpDirectLink.Builder mdlb = new MtuldpDirectLink.Builder().deviceEgress(link.dst()).deviceIngress(link.src()).mtuRate(0);
+                    try {
+                        mtuldpLinkStoreService.doAddLink(mdlb.build());
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
 
-        private EdgePortService edgePortService;
-
-        public InnerSearchEdgeLink(EdgePortService eps){
-            this.edgePortService = eps;
-        }
-
-        @Override
-        public void run() {
-            log.debug("/----------------------------/\nFinding new edge link\n/----------------------------------/");
-
-            System.out.println(hostService.getHostCount());
-
-
-            for (ConnectPoint connectPoint : edgePortService.getEdgePoints() ){
-
-
-                System.out.println(connectPoint.hostId()+ "merda");
-
-
-                for  (Host host : hostService.getConnectedHosts(connectPoint)){
-                    System.out.println("Host: " + host.id());
-                }
+                    break;
+                case LINK_REMOVED:
+                    break;
+                case LINK_UPDATED:
+                    break;
+                default:
 
             }
-        }
-    }
 
-    private void doSearchLink(Topology topo) {
-
-        if (topo.linkCount() != 0) {
 
         }
-
     }
 
 }
